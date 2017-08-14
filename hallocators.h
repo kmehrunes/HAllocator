@@ -19,7 +19,7 @@ class TypeBlocks
 public:
     TypeBlocks(hint_t num_blocks)
     {
-        T *start = new T[num_blocks];
+        start = new T[num_blocks];
         available = num_blocks;
 
         blocks.reserve(num_blocks);
@@ -50,8 +50,8 @@ public:
     }
 
 private:
-    std::vector<T *> blocks;
     void *start;
+    std::vector<T *> blocks;
     hint_t available;
 };
 
@@ -61,7 +61,7 @@ class RawBlocks
 public:
     RawBlocks(hint_t num_blocks)
     {
-        void *start = malloc(SIZE * num_blocks);
+        start = malloc(SIZE * num_blocks);
         available = num_blocks;
 
         blocks.reserve(num_blocks);
@@ -94,8 +94,8 @@ public:
     }
 
 private:
-    std::vector<void *> blocks;
     void *start;
+    std::vector<void *> blocks;
     hint_t available;
 };
 
@@ -154,9 +154,9 @@ private:
     }
 
 private:
+    void *start;
     void *blocks[NBLOCKS];
     hsize_t lens[NBLOCKS];
-    void *start;
 };
 
 template<typename HAllocator>
