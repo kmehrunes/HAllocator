@@ -17,11 +17,10 @@ template<typename T>
 class TypeBlocks
 {
 public:
-    TypeBlocks(hint_t num_blocks)
+    TypeBlocks(hint_t n_blocks):
+        num_blocks(n_blocks), available(n_blocks)
     {
-        start = new T[num_blocks];
-        available = num_blocks;
-
+        start = new T[n_blocks];
         blocks.reserve(num_blocks);
         for (hint_t i = 0; i < num_blocks; i++)
             blocks.push_back(&start[i]);
@@ -47,11 +46,23 @@ public:
     void free(T *ptr)
     {
         blocks.push_back(ptr);
+        ++available;
+    }
+
+    hint_t total_blocks() const
+    {
+        return num_blocks;
+    }
+
+    hint_t available_blocks() const
+    {
+        return available;
     }
 
 private:
-    void *start;
+    T *start;
     std::vector<T *> blocks;
+    hint_t num_blocks;
     hint_t available;
 };
 
@@ -59,16 +70,13 @@ template<hsize_t SIZE>
 class RawBlocks
 {
 public:
-    RawBlocks(hint_t num_blocks)
+    RawBlocks(hint_t n_blocks):
+        num_blocks(n_blocks), available(n_blocks)
     {
-        start = malloc(SIZE * num_blocks);
-        available = num_blocks;
-
-        blocks.reserve(num_blocks);
-        for (uint32_t i = 0; i < num_blocks; i++)
-        {
-            blocks.push_back(start + (SIZE * i));
-        }
+        start = malloc(SIZE * n_blocks);
+        blocks.reserve(n_blocks);
+        for (uint32_t i = 0; i < n_blocks; i++)
+            blocks.push_back((char *)start + (SIZE * i));
     }
 
     ~RawBlocks()
@@ -91,11 +99,23 @@ public:
     void free(void *ptr)
     {
         blocks.push_back(ptr);
+        ++available;
+    }
+
+    hint_t total_blocks() const
+    {
+        return num_blocks;
+    }
+
+    hint_t available_blocks() const
+    {
+        return available;
     }
 
 private:
     void *start;
     std::vector<void *> blocks;
+    hint_t num_blocks;
     hint_t available;
 };
 
@@ -121,19 +141,15 @@ public:
     void *alloc(hsize_t size)
     {
         hint_t n = (hint_t)ceil((float)size / SIZE);
-
-        for (hint_t i = 0; i < NBLOCKS; i++)
+        for (hint_t i = 0; i < NBLOCKS; ++i)
         {
-            if (NBLOCKS - i < n)
-                throw std::bad_alloc();
-
             if (can_satisfy(i, n))
             {
                 lens[i] = n;
                 return blocks[i];
             }
         }
-        return NULL;
+        throw std::bad_alloc();
     }
 
     void free(void *ptr)
@@ -142,10 +158,16 @@ public:
         lens[index] = 0;
     }
 
+    hint_t total_blocks() const
+    {
+        return NBLOCKS;
+    }
+
 private:
     bool can_satisfy(hint_t index, hint_t n)
     {
-        for (; index < n; ++index)
+        hint_t max = index + n;
+        for (; index < max; ++index)
         {
             if (lens[index] != 0)
                 return false;
