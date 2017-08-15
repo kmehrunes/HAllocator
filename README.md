@@ -35,3 +35,16 @@ void operator delete (void * p) throw()
     allocator.free(p);
 }
 ```
+
+### Compiling and Running Tests
+The tests are made using Catch (https://github.com/philsquared/Catch), and you need the single header file version of it. In order to run the tests using GCC you can run the following commands.
+
+```
+Execute this only once
+g++ -std=c++11 tests-main.cpp -c
+```
+
+```
+Execute this every time you need to re-run the tests
+g++ tests-main.o all-tests.cpp -o tests && ./tests
+```
