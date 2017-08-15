@@ -1,5 +1,5 @@
 # HAllocators
-** This is an Afternoon Project -quick small projects that make life a bit easier- **
+**This is an Afternoon Project -quick small projects that make life a bit easier-**
 
 A bunch of straighforward and simple heap memory allocators. They allocates the needed memory upfront and reuse blocks when freed.
 
