@@ -48,3 +48,65 @@ g++ -std=c++11 tests-main.cpp -c
 Execute this every time you need to re-run the tests
 g++ tests-main.o all-tests.cpp -o tests && ./tests
 ```
+
+### Benchmarking Results
+    malloc() cost (nanoseconds)
+        Count: 1000
+	    Sum: 169056
+	    Min: 63
+	    Max: 4276
+	    Range: 4213
+	    Mean: 169
+    free() cost (nanoseconds)
+	    Count: 1000
+	    Sum: 85117
+	    Min: 57
+	    Max: 1572
+	    Range: 1515
+	    Mean: 85
+    
+    type blocks alloc() cost (nanoseconds)
+	    Count: 1000
+	    Sum: 94856
+	    Min: 74
+	    Max: 904
+	    Range: 830
+	    Mean: 94
+    type blocks free() cost (nanoseconds)
+	    Count: 1000
+	    Sum: 75677
+	    Min: 61
+	    Max: 260
+	    Range: 199
+	    Mean: 75
+    
+    raw blocks alloc() cost (nanoseconds)
+        Count: 1000
+	    Sum: 97395
+	    Min: 73
+	    Max: 711
+	    Range: 638
+	    Mean: 97
+    raw blocks free() cost (nanoseconds)
+        Count: 1000
+	    Sum: 75291
+	    Min: 58
+	    Max: 351
+	    Range: 293
+	    Mean: 75
+ 
+    varys alloc() cost (nanoseconds)
+        Count: 1000
+	    Sum: 107433
+	    Min: 81
+	    Max: 1530
+	    Range: 1449
+	    Mean: 107
+    varys free() cost (nanoseconds)
+	    Count: 1000
+	    Sum: 50511
+	    Min: 38
+	    Max: 102
+	    Range: 64
+	    Mean: 50
+    
